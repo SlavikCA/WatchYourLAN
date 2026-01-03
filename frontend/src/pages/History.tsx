@@ -40,6 +40,23 @@ function History() {
       </div>
       <div class="card-body">
         <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th style="width: 2em;"></th>
+              <th style="white-space: nowrap;">Device</th>
+              <th style="width: 100%;">
+                <div class="timescale-header">
+                  <div class="timescale-bar">
+                    <For each={Array.from({length: 24}, (_, i) => i)}>{(hour) =>
+                      <div class="timescale-tick">
+                        <span class="timescale-label">{hour.toString().padStart(2, '0')}</span>
+                      </div>
+                    }</For>
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
           <tbody>
           <Show
             when={!histUpdOnFilter()}
@@ -52,7 +69,7 @@ function History() {
                 <a href={"http://"+host.IP}>{host.IP}</a>
               </td>
               <td style="width: 100%;">
-                <MacHistory mac={host.Mac} date={selectedDate()}></MacHistory>
+                <MacHistory mac={host.Mac} date={selectedDate()} showLabels={false}></MacHistory>
               </td>
             </tr>
             }</For>

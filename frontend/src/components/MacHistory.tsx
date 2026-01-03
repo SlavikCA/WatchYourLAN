@@ -1,4 +1,4 @@
-import { createEffect, For, onCleanup, onMount } from "solid-js";
+import { createEffect, For, onCleanup, onMount, Show } from "solid-js";
 import { getHistoryForMac } from "../functions/history";
 import { Host } from "../functions/exports";
 import { createStore } from "solid-js/store";
@@ -9,10 +9,17 @@ interface TimeSlot {
   entries: Host[];
 }
 
-function MacHistory(_props: any) {
+interface MacHistoryProps {
+  mac: string;
+  date: string;
+  showLabels?: boolean;
+}
+
+function MacHistory(_props: MacHistoryProps) {
 
   const [timeSlots, setTimeSlots] = createStore<TimeSlot[]>([]);
   let interval: number;
+  const showLabels = () => _props.showLabels !== false; // Default to true
 
   const processHistoryToTimeline = (history: Host[], date: string): TimeSlot[] => {
     // Initialize 24 time slots (one per hour)
@@ -90,13 +97,15 @@ function MacHistory(_props: any) {
           ></div>
         }</For>
       </div>
-      <div class="timeline-labels">
-        <span>00:00</span>
-        <span>06:00</span>
-        <span>12:00</span>
-        <span>18:00</span>
-        <span>24:00</span>
-      </div>
+      <Show when={showLabels()}>
+        <div class="timeline-labels">
+          <span>00:00</span>
+          <span>06:00</span>
+          <span>12:00</span>
+          <span>18:00</span>
+          <span>24:00</span>
+        </div>
+      </Show>
     </div>
   )
 }
