@@ -17,7 +17,7 @@
     background-color: var(--transparent-light);
 }
 
-/* History box */
+/* History box (legacy) */
 .my-box-on::before, .my-box-off::before {
     content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='18'></svg>");
     border-left: thin solid black;
@@ -30,4 +30,54 @@
 }
 .my-box-on:hover, .my-box-off:hover {
     background-color: #0000001a;
+}
+
+/* Timeline visualization */
+.timeline-container {
+    width: 100%;
+    min-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.timeline-bar {
+    display: flex;
+    height: 20px;
+    width: 100%;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.timeline-slot {
+    flex: 1;
+    height: 100%;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.timeline-slot:last-child {
+    border-right: none;
+}
+
+.timeline-slot:hover {
+    opacity: 0.7;
+}
+
+.timeline-on {
+    background-color: var(--bs-success, #198754);
+}
+
+.timeline-off {
+    background-color: var(--bs-gray-400, #ced4da);
+}
+
+.timeline-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7em;
+    color: var(--bs-secondary, #6c757d);
+    margin-top: 2px;
+    padding: 0 2px;
 }

@@ -1,17 +1,20 @@
-import { createEffect, For, Show } from "solid-js"
+import { createEffect, createSignal, For, Show } from "solid-js"
 import Filter from "../components/Filter"
-import { allHosts, histUpdOnFilter, Host, setHistUpdOnFilter, setShow, show } from "../functions/exports"
+import { allHosts, histUpdOnFilter, Host, setHistUpdOnFilter } from "../functions/exports"
 import MacHistory from "../components/MacHistory"
-import HistShow from "../components/HistShow"
 
 function History() {
 
   let hosts: Host[] = [];
   hosts.push(...allHosts);
 
-  const showStr = localStorage.getItem("histShow") as string;
-  setShow(+showStr);
-  (show() === 0 || isNaN(show())) ? setShow(200) : '';
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
+
+  const [selectedDate, setSelectedDate] = createSignal(getTodayDate());
   
   createEffect(() => {
     if (histUpdOnFilter()) {
@@ -26,7 +29,14 @@ function History() {
     <div class="card border-primary">
       <div class="card-header d-flex justify-content-between">
         <Filter></Filter>
-        <HistShow name="histShow"></HistShow>
+        <input 
+          type="date" 
+          class="form-control" 
+          style="max-width: 12em;"
+          value={selectedDate()}
+          onInput={(e) => setSelectedDate(e.target.value)}
+          title="Select date to view history"
+        />
       </div>
       <div class="card-body">
         <table class="table table-striped table-hover">
@@ -37,12 +47,12 @@ function History() {
             <For each={hosts}>{(host, index) =>
             <tr>
               <td class="opacity-50" style="width: 2em;">{index()+1}.</td>
-              <td>
+              <td style="white-space: nowrap;">
                 <a href={"/host/"+host.ID}>{host.Name}</a><br></br>
                 <a href={"http://"+host.IP}>{host.IP}</a>
               </td>
-              <td>
-                <MacHistory mac={host.Mac} date=""></MacHistory>
+              <td style="width: 100%;">
+                <MacHistory mac={host.Mac} date={selectedDate()}></MacHistory>
               </td>
             </tr>
             }</For>
