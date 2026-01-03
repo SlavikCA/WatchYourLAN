@@ -1,4 +1,4 @@
-import{C as y,D as f,E as v,o as m,G as H,e as u,S as d,t as D,b as I,s as b,H as h,l as M,F as g}from"./index.js";async function w(a,r){let e=[];return r===""?e=await y(a):e=await f(a,r),e!=null?(e.sort((s,t)=>s.Date<t.Date?1:-1),e):[]}var x=D("<i>");function F(a){const[r,e]=v([]);let s;return m(async()=>{const t=await w(a.mac,a.date);e(t),s=setInterval(async()=>{const o=await w(a.mac,a.date);e(o)},6e4)}),H(()=>{clearInterval(s)}),u(g,{each:r,children:(t,o)=>u(d,{get when(){return o()<M()},get children(){var i=x();return I(n=>{var c="Date:"+t.Date+`
-Iface:`+t.Iface+`
-IP:`+t.IP+`
-Known:`+t.Known,l=t.Now===0?"my-box-off":"my-box-on";return c!==n.e&&b(i,"title",n.e=c),l!==n.t&&h(i,n.t=l),n},{e:void 0,t:void 0}),i}})})}export{F as M};
+import{C as v,D as m,E as D,n as d,o as H,G as h,t as y,i as I,e as w,S as $,b,s as g,H as M,l as x,F as C}from"./index.js";async function E(r,o){let e=[];return o===""?e=await v(r):e=await m(r,o),e!=null?(e.sort((i,c)=>i.Date<c.Date?1:-1),e):[]}var F=y("<div class=history-line>"),G=y("<i>");function K(r){const[o,e]=D([]);let i;const c=async()=>{const n=await E(r.mac,r.date);if(r.date)e(n);else{const t=Date.now(),l=n.filter(s=>{const a=new Date(s.Date);return t-a.getTime()<=24*60*60*1e3});e(l)}};return d(()=>{c()}),H(()=>{i=setInterval(c,6e4)}),h(()=>{clearInterval(i)}),(()=>{var n=F();return I(n,w(C,{each:o,children:(t,l)=>w($,{get when(){return l()<x()},get children(){var s=G();return b(a=>{var f=`Date:${t.Date}
+Iface:${t.Iface}
+IP:${t.IP}
+Known:${t.Known}`,u=t.Now===0?"my-box-off":"my-box-on";return f!==a.e&&g(s,"title",a.e=f),u!==a.t&&M(s,a.t=u),a},{e:void 0,t:void 0}),s}})})),n})()}export{K as M};
