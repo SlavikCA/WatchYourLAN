@@ -31,3 +31,46 @@
 .my-box-on:hover, .my-box-off:hover {
     background-color: #0000001a;
 }
+
+/* Timeline styles */
+.timeline-container {
+    width: 100%;
+    min-width: 200px;
+}
+
+.timeline-bar {
+    position: relative;
+    height: 24px;
+    width: 100%;
+    background-color: var(--bs-gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.timeline-segment {
+    position: absolute;
+    height: 100%;
+    top: 0;
+}
+
+.timeline-on {
+    background-color: var(--bs-success);
+}
+
+.timeline-off {
+    background-color: var(--bs-gray-500);
+}
+
+.timeline-segment:hover {
+    opacity: 0.8;
+}
+
+.timeline-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--bs-secondary);
+    margin-top: 2px;
+    padding: 0 2px;
+}

@@ -1,4 +1,4 @@
-import { createEffect, For, Show } from "solid-js"
+import { createEffect, createSignal, For, Show } from "solid-js"
 import Filter from "../components/Filter"
 import { allHosts, histUpdOnFilter, Host, setHistUpdOnFilter, setShow, show } from "../functions/exports"
 import MacHistory from "../components/MacHistory"
@@ -12,7 +12,10 @@ function History() {
   const showStr = localStorage.getItem("histShow") as string;
   setShow(+showStr);
   (show() === 0 || isNaN(show())) ? setShow(200) : '';
-  
+
+  // Date picker state - default to today
+  const [selectedDate, setSelectedDate] = createSignal(new Date().toISOString().split('T')[0]);
+
   createEffect(() => {
     if (histUpdOnFilter()) {
       hosts = [];
@@ -24,9 +27,18 @@ function History() {
 
   return (
     <div class="card border-primary">
-      <div class="card-header d-flex justify-content-between">
+      <div class="card-header d-flex justify-content-between align-items-center">
         <Filter></Filter>
-        <HistShow name="histShow"></HistShow>
+        <div class="d-flex align-items-center gap-2">
+          <input 
+            type="date" 
+            class="form-control" 
+            value={selectedDate()} 
+            onInput={(e) => setSelectedDate(e.target.value)}
+            style="max-width: 15em;"
+          />
+          <HistShow name="histShow"></HistShow>
+        </div>
       </div>
       <div class="card-body">
         <table class="table table-striped table-hover">
@@ -42,7 +54,7 @@ function History() {
                 <a href={"http://"+host.IP}>{host.IP}</a>
               </td>
               <td>
-                <MacHistory mac={host.Mac} date=""></MacHistory>
+                <MacHistory mac={host.Mac} date={selectedDate()}></MacHistory>
               </td>
             </tr>
             }</For>
