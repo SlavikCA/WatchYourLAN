@@ -9,7 +9,7 @@ on:
   #   - 'src/**'
 
 env:
-  IMAGE_NAME: watchyourlan
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -45,8 +45,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:v2
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+            ghcr.io/${{ env.IMAGE_NAME }}:v2
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
