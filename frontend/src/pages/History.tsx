@@ -3,10 +3,14 @@ import Filter from "../components/Filter"
 import { allHosts, histUpdOnFilter, Host, setHistUpdOnFilter } from "../functions/exports"
 import MacHistory from "../components/MacHistory"
 
+console.log("[History MODULE] History.tsx loaded at", new Date().toString());
+
 function History() {
+  console.log("[History] Component rendering");
 
   let hosts: Host[] = [];
   hosts.push(...allHosts);
+  console.log("[History] allHosts count:", allHosts.length);
 
   // Get today's date in YYYY-MM-DD format
   const getTodayDate = () => {
@@ -15,7 +19,8 @@ function History() {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
     const result = `${year}-${month}-${day}`;
-    console.log("[History] getTodayDate:", result, "| raw Date:", today.toString(), "| ISO:", today.toISOString(), "| tzOffset:", today.getTimezoneOffset());
+    const isoDate = today.toISOString().split('T')[0];
+    console.log("[History] getTodayDate:", result, "| ISO would be:", isoDate, "| match:", result === isoDate, "| raw:", today.toString(), "| tzOffset:", today.getTimezoneOffset());
     return result;
   };
 
