@@ -45,6 +45,6 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/slavikca/watchyourlan:history2b
+            ghcr.io/slavikca/watchyourlan:history3
           cache-from: type=gha
           cache-to: type=gha,mode=max

@@ -32,7 +32,7 @@ function MacHistory(_props: MacHistoryProps) {
     // Process history entries
     history.forEach(entry => {
       const entryDate = new Date(entry.Date);
-      const entryDateStr = entryDate.toISOString().split('T')[0];
+      const entryDateStr = `${entryDate.getFullYear()}-${String(entryDate.getMonth() + 1).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
       
       // Only process entries for the selected date
       if (entryDateStr === date) {
