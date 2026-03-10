@@ -14,10 +14,13 @@ function History() {
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    const result = `${year}-${month}-${day}`;
+    console.log("[History] getTodayDate:", result, "| raw Date:", today.toString(), "| ISO:", today.toISOString(), "| tzOffset:", today.getTimezoneOffset());
+    return result;
   };
 
   const [selectedDate, setSelectedDate] = createSignal(getTodayDate());
+  console.log("[History] Initial selectedDate:", selectedDate());
   
   createEffect(() => {
     if (histUpdOnFilter()) {

@@ -30,10 +30,16 @@ function MacHistory(_props: MacHistoryProps) {
     }));
 
     // Process history entries
+    console.log(`[MacHistory] Processing ${history.length} entries for date="${date}"`);
+    if (history.length > 0) {
+      console.log("[MacHistory] Sample entry.Date:", history[0].Date);
+    }
+
     history.forEach(entry => {
-      const entryDate = new Date(entry.Date);
+      // Replace space with T to ensure consistent local-time parsing
+      const entryDate = new Date(entry.Date.replace(' ', 'T'));
       const entryDateStr = `${entryDate.getFullYear()}-${String(entryDate.getMonth() + 1).padStart(2, '0')}-${String(entryDate.getDate()).padStart(2, '0')}`;
-      
+
       // Only process entries for the selected date
       if (entryDateStr === date) {
         const hour = entryDate.getHours();
@@ -44,6 +50,8 @@ function MacHistory(_props: MacHistoryProps) {
             slots[hour].isOn = true;
           }
         }
+      } else {
+        console.log(`[MacHistory] Entry date mismatch: entryDateStr="${entryDateStr}" vs selected="${date}" | raw="${entry.Date}" | parsed="${entryDate.toString()}"`);
       }
     });
 
