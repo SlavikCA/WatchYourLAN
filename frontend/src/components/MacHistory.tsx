@@ -5,6 +5,7 @@ import { createStore } from "solid-js/store";
 
 interface TimeSlot {
   hour: number;
+  minute: number;  // start minute of the slot (0, 10, 20, 30, 40, 50)
   isOn: boolean;
   entries: Host[];
 }
@@ -21,10 +22,15 @@ function MacHistory(_props: MacHistoryProps) {
   let interval: number;
   const showLabels = () => _props.showLabels !== false; // Default to true
 
+  const SLOT_MINUTES = 10; // each slot covers 10 minutes
+  const SLOTS_PER_HOUR = 60 / SLOT_MINUTES;
+  const TOTAL_SLOTS = 24 * SLOTS_PER_HOUR; // 144 slots
+
   const processHistoryToTimeline = (history: Host[], date: string): TimeSlot[] => {
-    // Initialize 24 time slots (one per hour)
-    const slots: TimeSlot[] = Array.from({ length: 24 }, (_, i) => ({
-      hour: i,
+    // Initialize 144 time slots (one per 10 minutes)
+    const slots: TimeSlot[] = Array.from({ length: TOTAL_SLOTS }, (_, i) => ({
+      hour: Math.floor(i / SLOTS_PER_HOUR),
+      minute: (i % SLOTS_PER_HOUR) * SLOT_MINUTES,
       isOn: false,
       entries: []
     }));
@@ -43,11 +49,12 @@ function MacHistory(_props: MacHistoryProps) {
       // Only process entries for the selected date
       if (entryDateStr === date) {
         const hour = entryDate.getHours();
-        if (hour >= 0 && hour < 24) {
-          slots[hour].entries.push(entry);
-          // If any entry in this hour has Now=1, mark the slot as ON
+        const minute = entryDate.getMinutes();
+        const slotIndex = hour * SLOTS_PER_HOUR + Math.floor(minute / SLOT_MINUTES);
+        if (slotIndex >= 0 && slotIndex < TOTAL_SLOTS) {
+          slots[slotIndex].entries.push(entry);
           if (entry.Now === 1) {
-            slots[hour].isOn = true;
+            slots[slotIndex].isOn = true;
           }
         }
       } else {
@@ -81,13 +88,15 @@ function MacHistory(_props: MacHistoryProps) {
     clearInterval(interval);
   });
 
-  const formatHour = (hour: number): string => {
-    return hour.toString().padStart(2, '0') + ':00';
+  const formatTime = (hour: number, minute: number): string => {
+    return hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0');
   };
 
   const getTooltip = (slot: TimeSlot): string => {
     const status = slot.isOn ? 'ON' : 'OFF';
-    const time = formatHour(slot.hour) + ' - ' + formatHour((slot.hour + 1) % 24);
+    const endMinute = slot.minute + SLOT_MINUTES;
+    const endHour = slot.hour + Math.floor(endMinute / 60);
+    const time = formatTime(slot.hour, slot.minute) + ' - ' + formatTime(endHour % 24, endMinute % 60);
     if (slot.entries.length > 0) {
       const lastEntry = slot.entries[slot.entries.length - 1];
       return `Time: ${time}\nStatus: ${status}\nIP: ${lastEntry.IP}\nIface: ${lastEntry.Iface}`;
